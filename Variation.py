@@ -16,11 +16,11 @@ def fdot(a, b):
     return integ(a*b)
 '''orthonormalize:'''
 for i in range(4):
-    print(i, fs[i])
+    #print(i, fs[i])
     for j in range(i):
         fs[i] = fs[i] - fs[j]*fdot(fs[i], fs[j])/fdot(fs[j], fs[j])
     fs[i] = fs[i]/fdot(fs[i], fs[i])**0.5
-    print(i, fs[i])
+    #print(i, fs[i])
 
 def Ham(poly):
     return poly.derivative().derivative()*(-h*h/(2*m))
@@ -32,10 +32,15 @@ S = [[fdot(fs[i], fs[j])
 H = Matrix(4, 4, H)
 S = Matrix(4, 4, S)
 
-print(S)
+#print(S)
 
-for ev in (H.all_eigvects()):
+
+evs = H.all_eigvects()[::-1]
+#for ev in evs:
+#    print(ev)
+for n in range(4):
     p = Polynomial([0])
     for i in range(4):
-        p = p+fs[i]*ev[i]
-    print("P", p)
+        p = p+fs[i]*evs[n][i]
+    print(p)
+    print("P", fdot(p, Ham(p)), (h*(n+1)*3.14159/L)**2/(2*m))
